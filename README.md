@@ -4,6 +4,8 @@
 
 本项目面向 NFT 交易平台的反洗钱场景，探索在**不直接交换原始交易数据**的前提下，利用联邦学习协作训练 XGBoost 风险识别模型，并将模型结果落地为可操作的交易监测、可疑用户管理、交易链条追踪和平台安全评估功能。
 
+同时，本项目被整理为一套可用于实验教学和教学成果申报的综合案例：以真实问题为牵引，贯通数据、算法、隐私、安全、数据库、软件工程和平台开发，支持学生从单点知识练习走向完整工程实践。教学成果主文档见 [实验教学成果支撑材料](docs/teaching-award-support.md)。
+
 ## 项目亮点
 
 - **课程知识**：将 Python 数据分析、机器学习、数据库、软件工程、Web 开发、信息安全与区块链等知识串成完整项目链路。
@@ -22,6 +24,9 @@
 │   ├── technical-method.md    # 技术路线、模型和隐私保护思路
 │   ├── platform-results.md    # 平台功能、成果和局限
 │   ├── reproduction.md        # 环境准备与复现步骤
+│   ├── teaching-award-support.md # 评教学奖/教学成果申报支撑材料
+│   ├── experimental-teaching-design.md # 实验教学实施方案与任务单
+│   ├── evidence-index.md      # 申报表述与可核验证据索引
 │   └── materials/             # 技术文档、商业计划书、展示材料
 └── .gitignore
 ```
@@ -46,6 +51,9 @@
 - [技术方法说明](docs/technical-method.md)
 - [平台成果说明](docs/platform-results.md)
 - [环境与复现](docs/reproduction.md)
+- [实验教学成果支撑材料](docs/teaching-award-support.md)
+- [实验教学实施方案](docs/experimental-teaching-design.md)
+- [教学成果证据索引](docs/evidence-index.md)
 - [原始项目材料](docs/materials/)
 
 ## 实验结果

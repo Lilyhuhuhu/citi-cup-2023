@@ -49,6 +49,7 @@
 
 - [课程知识映射](docs/course-knowledge.md)
 - [技术方法说明](docs/technical-method.md)
+- [数据、方法与主要结果](docs/data-method-results.md)
 - [平台成果说明](docs/platform-results.md)
 - [环境与复现](docs/reproduction.md)
 - [实验教学成果支撑材料](docs/teaching-award-support.md)

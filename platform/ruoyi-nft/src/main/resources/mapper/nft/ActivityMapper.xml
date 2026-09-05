@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.nft.mapper.ActivityMapper">
+    
+    <resultMap type="Activity" id="ActivityResult">
+        <result property="activityId"    column="activity_id"    />
+        <result property="nftId"    column="nft_id"    />
+        <result property="priceUsd"    column="price_usd"    />
+        <result property="priceEth"    column="price_eth"    />
+        <result property="held"    column="held"    />
+        <result property="seller"    column="seller"    />
+        <result property="buyer"    column="buyer"    />
+    </resultMap>
+
+    <sql id="selectActivityVo">
+        select activity_id, nft_id, price_usd, price_eth, held, seller, buyer from activity
+    </sql>
+
+    <!--通过userId找到洗钱金额数-->
+    <select id="getMoneyByUserId" resultType="int" parameterType="Long">
+        select sum(price_usd) from activity
+        where
+            <if test="seller != null "> seller = #{userId}</if>
+            <if test="buyer != null "> or buyer = #{userId}</if>
+    </select>
+
+    <!--通过nft_id找到平台洗钱金额数-->
+    <select id="getMoneyByNft_id" resultType="int" parameterType="Long">
+        select sum(price_usd) from activity
+        where
+        <if test="nft_id != null "> nft_id = #{nftId}</if>
+    </select>
+
+    <!--通过交易时间held找到此阶段/当日的交易数-->
+    <select id="getCountByHeld" resultType="int" parameterType="java.util.Date">
+        select count(*) from activity
+        where
+            <if test="held != null "> held = #{held}</if>
+    </select>
+    <!--通过卖家找到所有买家-->
+    <select id="selectBuyerListBySeller" parameterType="Long" resultType="Long">
+        select buyer from activity
+        <where>
+            <if test="seller != null "> seller = #{seller}</if>
+        </where>
+    </select>
+
+    <!--通过买家找到所有卖家-->
+    <select id="selectSellerListByBuyer" parameterType="Long" resultType="Long">
+        select seller from activity
+        <where>
+            <if test="buyer != null "> buyer = #{buyer}</if>
+        </where>
+    </select>
+
+    <!--通过卖家找到交易表的所有信息-->
+    <select id="selectActivityListBySeller" parameterType="Long" resultMap="ActivityResult">
+        <include refid="selectActivityVo"/>
+        <where>
+            <if test="seller != null "> and seller = #{seller}</if>
+        </where>
+    </select>
+
+    <!--通过买家找到交易表的所有信息-->
+    <select id="selectActivityListByBuyer" parameterType="Long" resultMap="ActivityResult">
+        <include refid="selectActivityVo"/>
+        <where>
+            <if test="buyer != null "> and buyer = #{buyer}</if>
+        </where>
+    </select>
+
+    <select id="selectActivityList" parameterType="Activity" resultMap="ActivityResult">
+        <include refid="selectActivityVo"/>
+        <where>  
+            <if test="nftId != null "> and nft_id = #{nftId}</if>
+            <if test="priceUsd != null "> and price_usd = #{priceUsd}</if>
+            <if test="priceEth != null "> and price_eth = #{priceEth}</if>
+            <if test="held != null "> and held = #{held}</if>
+            <if test="seller != null "> and seller = #{seller}</if>
+            <if test="buyer != null "> and buyer = #{buyer}</if>
+        </where>
+    </select>
+
+    <select id="selectActivityByActivityId" parameterType="Long" resultMap="ActivityResult">
+        <include refid="selectActivityVo"/>
+        where activity_id = #{activityId}
+    </select>
+        
+    <insert id="insertActivity" parameterType="Activity" useGeneratedKeys="true" keyProperty="activityId">
+        insert into activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nftId != null">nft_id,</if>
+            <if test="priceUsd != null">price_usd,</if>
+            <if test="priceEth != null">price_eth,</if>
+            <if test="held != null">held,</if>
+            <if test="seller != null">seller,</if>
+            <if test="buyer != null">buyer,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nftId != null">#{nftId},</if>
+            <if test="priceUsd != null">#{priceUsd},</if>
+            <if test="priceEth != null">#{priceEth},</if>
+            <if test="held != null">#{held},</if>
+            <if test="seller != null">#{seller},</if>
+            <if test="buyer != null">#{buyer},</if>
+         </trim>
+    </insert>
+
+    <update id="updateActivity" parameterType="Activity">
+        update activity
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nftId != null">nft_id = #{nftId},</if>
+            <if test="priceUsd != null">price_usd = #{priceUsd},</if>
+            <if test="priceEth != null">price_eth = #{priceEth},</if>
+            <if test="held != null">held = #{held},</if>
+            <if test="seller != null">seller = #{seller},</if>
+            <if test="buyer != null">buyer = #{buyer},</if>
+        </trim>
+        where activity_id = #{activityId}
+    </update>
+
+    <delete id="deleteActivityByActivityId" parameterType="Long">
+        delete from activity where activity_id = #{activityId}
+    </delete>
+
+    <delete id="deleteActivityByActivityIds" parameterType="String">
+        delete from activity where activity_id in 
+        <foreach item="activityId" collection="array" open="(" separator="," close=")">
+            #{activityId}
+        </foreach>
+    </delete>
+</mapper>

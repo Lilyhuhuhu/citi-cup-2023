@@ -1,0 +1,21 @@
+.DS_Store
+.idea/
+*.iml
+*.log
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+target/
+node_modules/
+dist/
+build/
+*.class
+*.jar
+*.war
+coverage/
+platform/ruoyi-ui/.env*
+
+# Original submission files kept locally as an untouched backup.
+16-反洗钱联盟.pptx
+全员上岸队-*

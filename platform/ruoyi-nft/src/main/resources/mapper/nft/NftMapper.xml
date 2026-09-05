@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.nft.mapper.NftMapper">
+    
+    <resultMap type="Nft" id="NftResult">
+        <result property="nftId"    column="nft_id"    />
+        <result property="nftName"    column="nft_name"    />
+        <result property="img"    column="img"    />
+        <result property="rarity"    column="rarity"    />
+    </resultMap>
+
+    <sql id="selectNftVo">
+        select nft_id, nft_name, img, rarity from nft
+    </sql>
+
+    <select id="selectNftList" parameterType="Nft" resultMap="NftResult">
+        <include refid="selectNftVo"/>
+        <where>  
+            <if test="nftName != null  and nftName != ''"> and nft_name like concat('%', #{nftName}, '%')</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="rarity != null "> and rarity = #{rarity}</if>
+        </where>
+    </select>
+    
+    <select id="selectNftByNftId" parameterType="Long" resultMap="NftResult">
+        <include refid="selectNftVo"/>
+        where nft_id = #{nftId}
+    </select>
+        
+    <insert id="insertNft" parameterType="Nft" useGeneratedKeys="true" keyProperty="nftId">
+        insert into nft
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nftName != null">nft_name,</if>
+            <if test="img != null">img,</if>
+            <if test="rarity != null">rarity,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nftName != null">#{nftName},</if>
+            <if test="img != null">#{img},</if>
+            <if test="rarity != null">#{rarity},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNft" parameterType="Nft">
+        update nft
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nftName != null">nft_name = #{nftName},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="rarity != null">rarity = #{rarity},</if>
+        </trim>
+        where nft_id = #{nftId}
+    </update>
+
+    <delete id="deleteNftByNftId" parameterType="Long">
+        delete from nft where nft_id = #{nftId}
+    </delete>
+
+    <delete id="deleteNftByNftIds" parameterType="String">
+        delete from nft where nft_id in 
+        <foreach item="nftId" collection="array" open="(" separator="," close=")">
+            #{nftId}
+        </foreach>
+    </delete>
+</mapper>
